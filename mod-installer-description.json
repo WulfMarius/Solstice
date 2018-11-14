@@ -1,6 +1,6 @@
 ﻿{
 	"name": "Solstice",
-	"description": "The length of the day, as well as the temperature and brightness, will change over time.",
+	"description": "The length of the day, as well as the temperature and brightness, will change over time.\n\nSolstice is only available in custom mode.",
 	"url": "https://github.com/WulfMarius/Solstice",
 	"releases": [
 		{
