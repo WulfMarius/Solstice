@@ -1,7 +1,16 @@
 ﻿{
 	"name": "Solstice",
-	"description": "Changes the amount of sunlight per day over time.",
+	"description": "The length of the day, as well as the temperature and brightness, will change over time.",
 	"url": "https://github.com/WulfMarius/Solstice",
 	"releases": [
+		{
+			"version": "1.0.0",
+			"dependencies": [
+				{
+					"name": "ModSettings",
+					"version": "^v1.2"
+				}
+			]
+		}
 	]
 }
