@@ -17,7 +17,7 @@ namespace Solstice
         public int CycleLength = 1;
 
         [Name("Start Day")]
-        [Description("Where in the cycle the game starts.\nWinter: shortest days; Spring: days getting longer; Summer: longest days; Autumn: days getting shorter.")]
+        [Description("Where in the cycle the game starts.\nWinter: days are short and cold\nSpring: days are getting longer and warmer\nSummer: days are long and warm\nAutumn: days are getting shorter and colder")]
         public StartOffset StartDay = StartOffset.Random;
 
         protected override void OnChange(FieldInfo field, object oldValue, object newValue)

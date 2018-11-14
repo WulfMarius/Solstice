@@ -192,11 +192,11 @@ namespace Solstice
             }
 
             strength = interpolator.GetValue(INTERPOLATOR_STEPS * cycleDay / CycleLength);
-            BrightnessMultiplier = Mathf.Clamp(1.1f + strength, 0, 1);
-            TemperatureOffset = Mathf.Clamp(10 * strength, float.NegativeInfinity, 0);
+            BrightnessMultiplier = Mathf.Clamp(1.05f + strength, 0, 1);
+            TemperatureOffset = Mathf.Clamp(10 * strength, float.NegativeInfinity, 2);
             ConfigureKeyframeTimes(uniStormWeatherSystem);
 
-            Debug.Log("Day: " + cycleDay + " / " + CycleLength + "; strength: " + strength + "; BrightnessMultiplier: " + BrightnessMultiplier + "; TemperatureOffset: " + TemperatureOffset);
+            Log("Day: " + cycleDay + " / " + CycleLength + "; strength: " + strength + "; BrightnessMultiplier: " + BrightnessMultiplier + "; TemperatureOffset: " + TemperatureOffset);
         }
 
         private static void ConfigureKeyframeTimes(UniStormWeatherSystem uniStormWeatherSystem)
