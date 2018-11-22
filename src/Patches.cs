@@ -1,23 +1,11 @@
 ﻿using Harmony;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Solstice
 {
-    [HarmonyPatch(typeof(StatsManager), "Reset")]
-    internal class StatsManager_Reset
-    {
-        internal static void Postfix()
-        {
-            if (!GameManager.InCustomMode())
-            {
-                Implementation.Disable();
-            }
-        }
-    }
-
     [HarmonyPatch(typeof(SaveGameSystem), "RestoreGlobalData")]
     internal class SaveGameSystemPatch_RestoreGlobalData
     {
@@ -36,39 +24,65 @@ namespace Solstice
         }
     }
 
+    [HarmonyPatch(typeof(StatsManager), "Reset")]
+    internal class StatsManager_Reset
+    {
+        internal static void Postfix()
+        {
+            if (!GameManager.InCustomMode())
+            {
+                Implementation.Disable();
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(TimeWidget), "Start")]
+    internal class TimeWidget_Start
+    {
+        internal static void Postfix(TimeWidget __instance)
+        {
+            TimeWidgetUpdater.Initialize(__instance);
+        }
+    }
+
+    [HarmonyPatch(typeof(TimeWidget), "Update")]
+    internal class TimeWidget_Update
+    {
+        private static float nextUpdate;
+
+        internal static bool Prefix()
+        {
+            if (Time.unscaledTime > nextUpdate)
+            {
+                nextUpdate = Time.unscaledTime + 1;
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(TimeWidget), "UpdateIconPositions")]
+    internal class TimeWidget_UpdateIconPositions
+    {
+        internal static bool Prefix(TimeWidget __instance, float angleDegrees)
+        {
+            if (!Implementation.Enabled)
+            {
+                return true;
+            }
+
+            TimeWidgetUpdater.Update(__instance, angleDegrees);
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(UniStormWeatherSystem), "Init")]
     internal class UniStormWeatherSystem_Init
     {
         internal static void Postfix(UniStormWeatherSystem __instance)
         {
             Implementation.Init(__instance);
-        }
-    }
-
-    [HarmonyPatch(typeof(UniStormWeatherSystem), "Update")]
-    internal class UniStormWeatherSystem_Update
-    {
-        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            var codes = new List<CodeInstruction>(instructions);
-
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (codes[i].opcode != OpCodes.Call)
-                {
-                    continue;
-                }
-
-                MethodInfo methodInfo = codes[i].operand as MethodInfo;
-                if (methodInfo != null && methodInfo.Name == "UpdateSunTransform")
-                {
-                    codes[i - 1].opcode = OpCodes.Nop;
-                    codes[i].opcode = OpCodes.Nop;
-                    break;
-                }
-            }
-
-            return codes;
         }
     }
 
@@ -96,6 +110,33 @@ namespace Solstice
             __instance.m_SkyBloomIntensity *= brightnessMultiplier;
             __instance.m_SkyFogColor *= brightnessMultiplier;
             __instance.m_FogColor *= brightnessMultiplier;
+        }
+    }
+
+    [HarmonyPatch(typeof(UniStormWeatherSystem), "Update")]
+    internal class UniStormWeatherSystem_Update
+    {
+        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            var codes = new List<CodeInstruction>(instructions);
+
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (codes[i].opcode != OpCodes.Call)
+                {
+                    continue;
+                }
+
+                MethodInfo methodInfo = codes[i].operand as MethodInfo;
+                if (methodInfo != null && methodInfo.Name == "UpdateSunTransform")
+                {
+                    codes[i - 1].opcode = OpCodes.Nop;
+                    codes[i].opcode = OpCodes.Nop;
+                    break;
+                }
+            }
+
+            return codes;
         }
     }
 

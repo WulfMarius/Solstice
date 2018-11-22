@@ -215,6 +215,8 @@ namespace Solstice
             keyframeTimes[4] = keyframeTimes[5] - 1;
 
             uniStormWeatherSystem.m_SunAngle = sunAngle.Calculate(strength);
+
+            TimeWidgetUpdater.SetTimes(keyframeTimes[1], keyframeTimes[5]);
         }
 
         private static void RestoreKeyframeTimes(UniStormWeatherSystem uniStormWeatherSystem)

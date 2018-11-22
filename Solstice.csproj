@@ -55,6 +55,7 @@
     <Compile Include="src\Interpolator.cs" />
     <Compile Include="src\Patches.cs" />
     <Compile Include="src\GUISettings.cs" />
+    <Compile Include="src\TimeWidgetUpdater.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

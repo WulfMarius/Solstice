@@ -7,6 +7,11 @@ namespace Solstice
     {
         private IDictionary<float, float> values = new SortedDictionary<float, float>();
 
+        public void Clear()
+        {
+            this.values.Clear();
+        }
+
         public float GetValue(float position)
         {
             float leftPosition = float.NaN;
